@@ -1,0 +1,51 @@
+*.elf    
+# unecrypted be like
+
+*.self   
+# encrypted be like
+
+*.ppu
+*.spu
+# gpu/cpu be like
+
+# some bullshit fuckery stuff down here
+*.dbg
+*.sym
+*.map
+
+*.o
+*.obj
+# compiled be like
+
+*.a
+*.so
+# compiled more be like
+
+*.dll    
+# windows be like
+
+*.lib
+
+*.d
+*.dep
+
+*.lst    
+# typed lsd the first time i was typing this bullshit
+
+# bullshit ides
+.vscode/
+.idea/
+*.code-workspace
+
+.DS_Store
+Thumbs.db
+# macos be like
+
+desktop.ini
+# windows be like
+
+*.pkg
+# ps3 be like
+
+RPCS3.log*
+# RPCS3 be like
