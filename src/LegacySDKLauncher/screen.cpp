@@ -6,6 +6,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>  
+#include <sys/timer.h> 
 
 static void* gCommandBuffer		= NULL;
 static void* gHostMemory		= NULL;
@@ -21,6 +23,7 @@ bool screen::gInitialized = false;
 
 #define COMMAND_SIZE		(65536)			// 64KB
 #define BUFFER_SIZE			(1024 * 1024)	// 1MB
+#define PARAMSFO			0
 
 void screen::displayRes(uint32_t& outWidth, uint32_t& outHeight, uint8_t& outResId) {
 	CellVideoOutState videoState;
@@ -35,16 +38,19 @@ void screen::displayRes(uint32_t& outWidth, uint32_t& outHeight, uint8_t& outRes
 }
 
 bool screen::init(uint32_t width, uint32_t height) {
-	cellSysmoduleLoadModule(CELL_SYSMODULE_GCM_SYS);
-
-	CellGcmConfig config;
-	cellGcmGetConfiguration(&config); // not sure but this should just work
-	// yes it will, https://research.ncl.ac.uk/game/mastersdegree/workshops/ps3introductiontogcm/tutorial6.pdf page 12	
+	if (cellSysmoduleLoadModule(CELL_SYSMODULE_GCM_SYS) != CELL_OK) {
+		std::cerr << "sysmodule load failed!" << std::endl;
+		return false;
+	}
 	gHostMemory = memalign(1024 * 1024, BUFFER_SIZE);
 	if (cellGcmInit(COMMAND_SIZE, BUFFER_SIZE, gHostMemory) != CELL_OK) {
 		std::cout << "cellGcmInit failed !" << std::endl;
 		return false;
 	}
+
+	CellGcmConfig config;
+	cellGcmGetConfiguration(&config); // not sure but this should just work
+	// yes it will, https://research.ncl.ac.uk/game/mastersdegree/workshops/ps3introductiontogcm/tutorial6.pdf page 12
 	
 	uint8_t resolutionId = CELL_VIDEO_OUT_RESOLUTION_720;
 	if (width == 0 || height == 0) {
@@ -57,6 +63,7 @@ bool screen::init(uint32_t width, uint32_t height) {
 
 	std::cout << "initializing display/screen at " << gWidth << "x" << gHeight << std::endl;
 
+#if PARAMSFO
 	CellVideoOutConfiguration videoConfig;
 	memset(&videoConfig, 0, sizeof(CellVideoOutConfiguration));
 	videoConfig.resolutionId = resolutionId;
@@ -67,6 +74,9 @@ bool screen::init(uint32_t width, uint32_t height) {
 		std::cout << "Failed to configure video output!" << std::endl;
 		return false;
 	}
+#else
+	std::cout << "no sfo" << std::endl;
+#endif
 
 	cellGcmSetWaitFlip(gCellGcmCurrentContext);
 
@@ -95,22 +105,24 @@ bool screen::init(uint32_t width, uint32_t height) {
 
 void screen::flip() {
 	if (!gInitialized) return;
-
 	cellGcmSetFlip(gCellGcmCurrentContext, gCurrentBuffer);
 	cellGcmFlush(gCellGcmCurrentContext);
 	cellGcmSetWaitFlip(gCellGcmCurrentContext);
 	gCurrentBuffer = !gCurrentBuffer;
+
+	while (cellGcmGetFlipStatus() != 0) {
+		sys_timer_usleep(200);
+	}
+	cellGcmResetFlipStatus();
 }
 
 void screen::shutdown() {
 	if (!gInitialized) return;
 	cellGcmFinish(gCellGcmCurrentContext, 0);
-
 	if (gHostMemory) {
 		free(gHostMemory);
 		gHostMemory = NULL;
 	}
-
 	cellSysmoduleUnloadModule(CELL_SYSMODULE_GCM_SYS);
 	gInitialized = false;
 }
