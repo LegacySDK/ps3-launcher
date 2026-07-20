@@ -36,6 +36,9 @@
 .vscode/
 .idea/
 *.code-workspace
+# visual studio be like
+*.sdf
+*.suo
 
 .DS_Store
 Thumbs.db
