@@ -48,7 +48,7 @@ desktop.ini
 # windows be like
 
 *.pkg
-**/PS3/
+**/PS3*/
 # ps3 be like
 
 RPCS3.log*
