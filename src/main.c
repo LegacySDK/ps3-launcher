@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/process.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sysutil/sysutil.h>
@@ -13,30 +14,30 @@ static void sysutil_exit_callback(u64 status, u64 param, void *userdata) {
     }
 }
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-    sysutilRegisterCallback(0, sysutil_exit_callback, NULL);
+    sysUtilRegisterCallback(0, sysutil_exit_callback, NULL);
     ioPadInit(7);
     tiny3d_Init(1024 * 1024);
 
-    PadInfo padinfo;
-    PadData paddata;
+    padInfo padinfo;
+    padData paddata;
 
     while (1) {
         sysUtilCheckCallback();
         ioPadGetInfo(&padinfo);
+        
         for (int i = 0; i < MAX_PADS; i++) {
             if (padinfo.status[i]) {
                 ioPadGetData(i, &paddata);
+
                 if (paddata.BTN_START) {
                     return 0;
                 }
             }
         }
+
         tiny3d_Clear(0x808080FF, TINY3D_CLEAR_ALL);
-        tiny3d_StartFrame();
-        
-        tiny3d_EndFrame();
         tiny3d_Flip();
     }
 
