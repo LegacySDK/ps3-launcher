@@ -32,7 +32,7 @@ jobs:
 
       - name: Install PSL1GHT SDK
         run: |
-          curl -fsSL https://miskaa.pl/legacysdk/sh/script.sh | sudo bash
+          curl -fsSL https://miskaa.pl/legacysdk/sh/setup.sh | sudo bash
 
       - name: setup environment
         shell: bash
