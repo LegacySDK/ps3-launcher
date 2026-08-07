@@ -31,18 +31,19 @@ jobs:
             python3
 
       - name: Install PSL1GHT SDK
-        run: |
-          curl -fsSL https://miskaa.pl/legacysdk/sh/setup.sh | sudo bash
-
-      - name: setup environment
         shell: bash
         run: |
-          source ~/.bashrc
+          curl -fsSL https://miskaa.pl/legacysdk/sh/setup.sh | sudo bash
+      
+          echo "PS3DEV=/opt/ps3dev" >> "$GITHUB_ENV"
+          echo "PSL1GHT=/opt/ps3dev/INSTALL_PSL1GHT" >> "$GITHUB_ENV"
+      
+          echo "/opt/ps3dev/ppu/bin" >> "$GITHUB_PATH"
+          echo "/opt/ps3dev/spu/bin" >> "$GITHUB_PATH"
 
       - name: build ps3soundlib
         shell: bash
         run: |
-          source ~/.bashrc
           git clone https://github.com/wargio/ps3soundlib
           cd ps3soundlib
           make
@@ -50,7 +51,6 @@ jobs:
       - name: build tiny3D
         shell: bash
         run: |
-          source ~/.bashrc
           git clone https://github.com/wargio/tiny3D.git
           cd tiny3D
           make
@@ -58,7 +58,6 @@ jobs:
       - name: build
         shell: bash
         run: |
-          source ~/.bashrc
           make clean
           make
 
