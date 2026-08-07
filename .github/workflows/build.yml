@@ -41,6 +41,11 @@ jobs:
           echo "/opt/ps3dev/ppu/bin" >> "$GITHUB_PATH"
           echo "/opt/ps3dev/spu/bin" >> "$GITHUB_PATH"
 
+      - name: g
+        run: |
+          mkdir -p /opt/ps3dev/portlibs/ppu/lib
+          mkdir -p /opt/ps3dev/portlibs/ppu/include
+
       - name: build ps3soundlib
         shell: bash
         run: |
