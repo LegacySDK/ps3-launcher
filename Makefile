@@ -17,7 +17,7 @@ include $(PSL1GHT)/ppu_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	src
+SOURCES 	:= src src/utils src/3party
 DATA		:=	data
 INCLUDES	:=	src/includes
 
@@ -36,7 +36,7 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS    :=  -ltiny3d -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm
+LIBS := -ltiny3d -lrsx -lsimdmath -lgcm_sys -lio -lsysutil -lrt -llv2 -lpngdec -lsysmodule -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
