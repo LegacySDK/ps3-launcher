@@ -81,7 +81,6 @@ int main(int argc, char *argv[]) {
                     TINY3D_BLEND_FUNC_DST_RGB_ONE_MINUS_SRC_ALPHA | TINY3D_BLEND_FUNC_DST_ALPHA_ZERO,
                     TINY3D_BLEND_RGB_FUNC_ADD | TINY3D_BLEND_ALPHA_FUNC_ADD
                 );
-                PrintStr(16.0f, screenH - 48.0f, 0, "Launching... quitting now", 0xffffff00);
                 tiny3d_Flip();
                 return 0;
             }
@@ -125,21 +124,13 @@ int main(int argc, char *argv[]) {
             DrawRect(buttonX, y, 0, buttonW, buttonH, inner);
 
             char itemText[64];
-            sprintf(itemText, "[ %s ]", menuItems[i]);
+            sprintf(itemText, "%s", menuItems[i]);
             float itemWidth = strlen(itemText) * 16.0f;
             float itemX = buttonX + (buttonW - itemWidth) / 2.0f;
             float itemY = y + (buttonH - 16.0f) / 2.0f;
 
             PrintStr(itemX, itemY, 0, itemText, textCol);
         }
-
-        //char debugLine[128];
-        //sprintf(debugLine, "Selected: %s", menuItems[selectedItem]);
-        //PrintStr(16.0f, screenH - 96.0f, 0, debugLine, 0xff00ffff);
-        //sprintf(debugLine, "Use D-pad up/down to move.");
-        //PrintStr(16.0f, screenH - 80.0f, 0, debugLine, 0xffffff00);
-        //sprintf(debugLine, "Press Cross/Circle/Start to select.");
-        //PrintStr(16.0f, screenH - 64.0f, 0, debugLine, 0xffffff00);
 
         tiny3d_Flip();
     }
