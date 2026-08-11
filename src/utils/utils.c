@@ -87,6 +87,20 @@ void PrintStr(float x, float y, float z, char *ch, u32 color) {
     }
 }
 
+void DrawRect(float x, float y, float z, float w, float h, u32 rgba)
+{
+    tiny3d_SetPolygon(TINY3D_QUADS);
+
+    tiny3d_VertexPos(x, y, z);
+    tiny3d_VertexColor(rgba);
+
+    tiny3d_VertexPos(x + w, y, z);
+    tiny3d_VertexPos(x + w, y + h, z);
+    tiny3d_VertexPos(x, y + h, z);
+
+    tiny3d_End();
+}
+
 void DrawCorners2d(float x, float y, float z, u32 rgba)
 {
     tiny3d_SetPolygon(TINY3D_QUADS);
